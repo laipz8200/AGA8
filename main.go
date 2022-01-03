@@ -27,9 +27,9 @@ The compositions in the x() array use the following order and must be sent as mo
 package main
 
 import (
-	"fmt"
 	"math"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/data/binding"
@@ -1385,32 +1385,33 @@ func AGA8(T, P float64, _x []float64) (mm, D, Z, dPdD, dPdD2, dPdT, U, H, S, Cv,
 	// var Z, dPdD, dPdD2, d2PdTD, dPdT, U, H, S, Cv, Cp, W, G, JT, Kappa float64
 	PropertiesDetail(T, D, x, &P, &Z, &dPdD, &dPdD2, &d2PdTD, &dPdT, &U, &H, &S, &Cv, &Cp, &W, &G, &JT, &Kappa)
 
-	fmt.Printf("Inputs-----\n")
-	fmt.Printf("Temperature [K]:                    %0.16g\n", T)
-	fmt.Printf("Pressure [kPa]:                     %0.16g\n", P)
-	fmt.Printf("Outputs-----\n")
-	fmt.Printf("Molar mass [g/mol]:                 %0.16g\n", mm)
-	fmt.Printf("Molar density [mol/l]:              %0.16g\n", D)
-	fmt.Printf("Pressure [kPa]:                     %0.16g\n", P)
-	fmt.Printf("Compressibility factor:             %0.16g\n", Z)
-	fmt.Printf("d(P)/d(rho) [kPa/(mol/l)]:          %0.16g\n", dPdD)
-	fmt.Printf("d^2(P)/d(rho)^2 [kPa/(mol/l)^2]:    %0.16g\n", dPdD2)
-	fmt.Printf("d(P)/d(T) [kPa/K]:                  %0.16g\n", dPdT)
-	fmt.Printf("Energy [J/mol]:                     %0.16g\n", U)
-	fmt.Printf("Enthalpy [J/mol]:                   %0.16g\n", H)
-	fmt.Printf("Entropy [J/mol-K]:                  %0.16g\n", S)
-	fmt.Printf("Isochoric heat capacity [J/mol-K]:  %0.16g\n", Cv)
-	fmt.Printf("Isobaric heat capacity [J/mol-K]:   %0.16g\n", Cp)
-	fmt.Printf("Speed of sound [m/s]:               %0.16g\n", W)
-	fmt.Printf("Gibbs energy [J/mol]:               %0.16g\n", G)
-	fmt.Printf("Joule-Thomson coefficient [K/kPa]:  %0.16g\n", JT)
-	fmt.Printf("Isentropic exponent:                %0.16g\n", Kappa)
+	// fmt.Printf("Inputs-----\n")
+	// fmt.Printf("Temperature [K]:                    %0.16g\n", T)
+	// fmt.Printf("Pressure [kPa]:                     %0.16g\n", P)
+	// fmt.Printf("Outputs-----\n")
+	// fmt.Printf("Molar mass [g/mol]:                 %0.16g\n", mm)
+	// fmt.Printf("Molar density [mol/l]:              %0.16g\n", D)
+	// fmt.Printf("Pressure [kPa]:                     %0.16g\n", P)
+	// fmt.Printf("Compressibility factor:             %0.16g\n", Z)
+	// fmt.Printf("d(P)/d(rho) [kPa/(mol/l)]:          %0.16g\n", dPdD)
+	// fmt.Printf("d^2(P)/d(rho)^2 [kPa/(mol/l)^2]:    %0.16g\n", dPdD2)
+	// fmt.Printf("d(P)/d(T) [kPa/K]:                  %0.16g\n", dPdT)
+	// fmt.Printf("Energy [J/mol]:                     %0.16g\n", U)
+	// fmt.Printf("Enthalpy [J/mol]:                   %0.16g\n", H)
+	// fmt.Printf("Entropy [J/mol-K]:                  %0.16g\n", S)
+	// fmt.Printf("Isochoric heat capacity [J/mol-K]:  %0.16g\n", Cv)
+	// fmt.Printf("Isobaric heat capacity [J/mol-K]:   %0.16g\n", Cp)
+	// fmt.Printf("Speed of sound [m/s]:               %0.16g\n", W)
+	// fmt.Printf("Gibbs energy [J/mol]:               %0.16g\n", G)
+	// fmt.Printf("Joule-Thomson coefficient [K/kPa]:  %0.16g\n", JT)
+	// fmt.Printf("Isentropic exponent:                %0.16g\n", Kappa)
 	return
 }
 
 func main() {
 	a := app.New()
 	w := a.NewWindow("AGA8")
+	w.Resize(fyne.NewSize(1280, 0))
 
 	T := binding.NewFloat()
 	P := binding.NewFloat()
@@ -1622,7 +1623,12 @@ func main() {
 	})
 	buttonGroup := container.NewGridWithRows(1, calculate, reset)
 
-	input := container.NewVBox(widget.NewLabel("Composition"), composition, widget.NewLabel("Condition"), condition, layout.NewSpacer(), buttonGroup)
+	title := container.NewCenter(widget.NewLabelWithStyle("Natural Gas Calculation", fyne.TextAlignCenter, fyne.TextStyle{
+		Bold:      true,
+		Italic:    true,
+		Monospace: true,
+	}))
+	left := container.NewVBox(widget.NewLabel("Composition"), composition, widget.NewLabel("Condition"), condition, layout.NewSpacer(), buttonGroup)
 	output := container.New(
 		layout.NewFormLayout(),
 		widget.NewLabel("Molar mass [g/mol]:"), MolarMass,
@@ -1643,6 +1649,8 @@ func main() {
 		widget.NewLabel("Isentropic exponent:"), IsentropicExponent,
 	)
 
-	w.SetContent(container.NewGridWithColumns(2, input, output))
+	right := container.NewVBox(output, layout.NewSpacer())
+	content := container.NewVBox(title, container.NewGridWithColumns(2, left, right))
+	w.SetContent(container.NewPadded(content))
 	w.ShowAndRun()
 }
