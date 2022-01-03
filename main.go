@@ -29,6 +29,12 @@ package main
 import (
 	"fmt"
 	"math"
+
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/data/binding"
+	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/widget"
 )
 
 var RDetail float64
@@ -1355,7 +1361,7 @@ func SetupDetail() {
 	return
 }
 
-func main() {
+func AGA8() {
 	SetupDetail()
 	var _x = []float64{0.965, 0.003, 0.006, 0.018, 0.0045, 0.001, 0.001, 0.0005, 0.0003, 0.0007, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
 	x := _x[:NcDetail]
@@ -1398,4 +1404,130 @@ func main() {
 	fmt.Printf("Gibbs energy [J/mol]:               %0.16g\n", G)
 	fmt.Printf("Joule-Thomson coefficient [K/kPa]:  %0.16g\n", JT)
 	fmt.Printf("Isentropic exponent:                %0.16g\n", Kappa)
+}
+
+func main() {
+	a := app.New()
+	w := a.NewWindow("AGA8")
+
+	T := binding.NewFloat()
+	P := binding.NewFloat()
+
+	CH4 := binding.NewFloat()
+	N2 := binding.NewFloat()
+	CO2 := binding.NewFloat()
+	C2H6 := binding.NewFloat()
+	C3H8 := binding.NewFloat()
+	H2O := binding.NewFloat()
+	H2S := binding.NewFloat()
+	H2 := binding.NewFloat()
+	CO := binding.NewFloat()
+	O2 := binding.NewFloat()
+	iC4H10 := binding.NewFloat()
+
+	nC4H10 := binding.NewFloat()
+	iC5H12 := binding.NewFloat()
+	nC5H12 := binding.NewFloat()
+	nC6H14 := binding.NewFloat()
+	nC7H16 := binding.NewFloat()
+	nC8H18 := binding.NewFloat()
+	nC9H20 := binding.NewFloat()
+	nC10H22 := binding.NewFloat()
+	He := binding.NewFloat()
+	Ar := binding.NewFloat()
+
+	tempreture := widget.NewEntryWithData(binding.FloatToString(T))
+	absolutePressure := widget.NewEntryWithData(binding.FloatToString(P))
+
+	methane := widget.NewEntryWithData(binding.FloatToString(CH4))         // 甲烷
+	nitrogen := widget.NewEntryWithData(binding.FloatToString(N2))         // 氮气
+	carbonDioxide := widget.NewEntryWithData(binding.FloatToString(CO2))   // 二氧化碳
+	ethane := widget.NewEntryWithData(binding.FloatToString(C2H6))         // 乙烷
+	propane := widget.NewEntryWithData(binding.FloatToString(C3H8))        // 丙烷
+	water := widget.NewEntryWithData(binding.FloatToString(H2O))           // 水
+	hydrogenSulfide := widget.NewEntryWithData(binding.FloatToString(H2S)) // 硫化氢
+	hydrogen := widget.NewEntryWithData(binding.FloatToString(H2))         // 氢气
+	carbonMonoxide := widget.NewEntryWithData(binding.FloatToString(CO))   // 一氧化碳
+	oxygen := widget.NewEntryWithData(binding.FloatToString(O2))           // 氧气
+	isobutane := widget.NewEntryWithData(binding.FloatToString(iC4H10))    // 异丁烷
+	nButane := widget.NewEntryWithData(binding.FloatToString(nC4H10))      // 正丁烷
+	isopentane := widget.NewEntryWithData(binding.FloatToString(iC5H12))   // 异戊烷
+	nPentane := widget.NewEntryWithData(binding.FloatToString(nC5H12))     // 正戊烷
+	nHexane := widget.NewEntryWithData(binding.FloatToString(nC6H14))      // 正己烷
+	nHeptane := widget.NewEntryWithData(binding.FloatToString(nC7H16))     // 正庚烷
+	nOctane := widget.NewEntryWithData(binding.FloatToString(nC8H18))      // 正辛烷
+	nNonane := widget.NewEntryWithData(binding.FloatToString(nC9H20))      // 正壬烷
+	nDecane := widget.NewEntryWithData(binding.FloatToString(nC10H22))     // 正癸烷
+	helium := widget.NewEntryWithData(binding.FloatToString(He))           // 氦气
+	argon := widget.NewEntryWithData(binding.FloatToString(Ar))            // 氩气
+
+	cleft := container.NewVBox(
+		container.NewHBox(widget.NewLabel("methane"), layout.NewSpacer(), methane),
+		container.NewHBox(widget.NewLabel("nitrogen"), layout.NewSpacer(), nitrogen),
+		container.NewHBox(widget.NewLabel("carbonDioxide"), layout.NewSpacer(), carbonDioxide),
+		container.NewHBox(widget.NewLabel("ethane"), layout.NewSpacer(), ethane),
+		container.NewHBox(widget.NewLabel("propane"), layout.NewSpacer(), propane),
+		container.NewHBox(widget.NewLabel("water"), layout.NewSpacer(), water),
+		container.NewHBox(widget.NewLabel("hydrogenSulfide"), layout.NewSpacer(), hydrogenSulfide),
+		container.NewHBox(widget.NewLabel("hydrogen"), layout.NewSpacer(), hydrogen),
+		container.NewHBox(widget.NewLabel("carbonMonoxide"), layout.NewSpacer(), carbonMonoxide),
+		container.NewHBox(widget.NewLabel("oxygen"), layout.NewSpacer(), oxygen),
+		container.NewHBox(widget.NewLabel("isobutane"), layout.NewSpacer(), isobutane),
+	)
+
+	cright := container.NewVBox(
+		container.NewHBox(widget.NewLabel("nButane"), layout.NewSpacer(), nButane),
+		container.NewHBox(widget.NewLabel("isopentane"), layout.NewSpacer(), isopentane),
+		container.NewHBox(widget.NewLabel("nPentane"), layout.NewSpacer(), nPentane),
+		container.NewHBox(widget.NewLabel("nHexane"), layout.NewSpacer(), nHexane),
+		container.NewHBox(widget.NewLabel("nHeptane"), layout.NewSpacer(), nHeptane),
+		container.NewHBox(widget.NewLabel("nOctane"), layout.NewSpacer(), nOctane),
+		container.NewHBox(widget.NewLabel("nNonane"), layout.NewSpacer(), nNonane),
+		container.NewHBox(widget.NewLabel("nDecane"), layout.NewSpacer(), nDecane),
+		container.NewHBox(widget.NewLabel("helium"), layout.NewSpacer(), helium),
+		container.NewHBox(widget.NewLabel("argon"), layout.NewSpacer(), argon),
+	)
+
+	composition := container.NewHBox(
+		cleft, cright,
+	)
+
+	condition := container.NewVBox(
+		container.NewHBox(widget.NewLabel("tempreture [K]"), layout.NewSpacer(), tempreture),
+		container.NewHBox(widget.NewLabel("absolute pressure [kPa]"), layout.NewSpacer(), absolutePressure),
+	)
+
+	reset := widget.NewButton("Reset", func() {
+		T.Set(0)
+		P.Set(0)
+		CH4.Set(0)
+		N2.Set(0)
+		CO2.Set(0)
+		C2H6.Set(0)
+		C3H8.Set(0)
+		H2O.Set(0)
+		H2S.Set(0)
+		H2.Set(0)
+		CO.Set(0)
+		O2.Set(0)
+		iC4H10.Set(0)
+		nC4H10.Set(0)
+		iC5H12.Set(0)
+		nC5H12.Set(0)
+		nC6H14.Set(0)
+		nC7H16.Set(0)
+		nC8H18.Set(0)
+		nC9H20.Set(0)
+		nC10H22.Set(0)
+		He.Set(0)
+		Ar.Set(0)
+	})
+	calculate := widget.NewButton("Calculate", func() {
+	})
+	buttonGroup := container.NewHBox(calculate, layout.NewSpacer(), reset)
+	input := container.NewVBox(widget.NewLabel("Composition"), composition, widget.NewLabel("Condition"), condition, layout.NewSpacer(), buttonGroup)
+	output := container.NewVBox(widget.NewLabel("right"))
+
+	w.SetContent(container.NewHBox(input, layout.NewSpacer(), output))
+	w.ShowAndRun()
 }
