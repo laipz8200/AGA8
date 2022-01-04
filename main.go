@@ -203,7 +203,6 @@ func DensityDetail(T float64, P float64, x []float64, D *float64, ierr *int, her
 	*ierr = 1
 	*herr = "Calculation failed to converge in DETAIL method, ideal gas density returned."
 	*D = P / RDetail / T
-	return
 }
 
 func PropertiesDetail(T float64, D float64, x []float64, P *float64, Z *float64, dPdD *float64, d2PdD2 *float64, d2PdTD *float64, dPdT *float64, U *float64, H *float64, S *float64, Cv *float64, Cp *float64, W *float64, G *float64, JT *float64, Kappa *float64) {
@@ -1358,7 +1357,6 @@ func SetupDetail() {
 		n0i[i][3] = n0i[i][3] - 1
 		n0i[i][1] = n0i[i][1] - math.Log(d0)
 	}
-	return
 }
 
 func AGA8(T, P float64, _x []float64) (mm, D, Z, dPdD, dPdD2, dPdT, U, H, S, Cv, Cp, W, G, JT, Kappa float64) {
