@@ -1648,7 +1648,74 @@ func main() {
 	)
 
 	right := container.NewVBox(output, layout.NewSpacer())
-	content := container.NewVBox(title, container.NewGridWithColumns(2, left, right))
-	w.SetContent(container.NewPadded(content))
+	main := container.NewVBox(title, container.NewGridWithColumns(2, left, right))
+
+	transT := binding.NewFloat()
+	transP := binding.NewFloat()
+	transM := binding.NewFloat()
+
+	TransT := widget.NewEntryWithData(binding.FloatToString(transT))
+	TransP := widget.NewEntryWithData(binding.FloatToString(transP))
+	TransM := widget.NewEntryWithData(binding.FloatToString(transM))
+
+	baseInfo := container.New(
+		layout.NewFormLayout(),
+		widget.NewLabel("temperature [C]"), TransT,
+		widget.NewLabel("absolute pressure [Pa]"), TransP,
+		widget.NewLabel("Molar mass [g/mol]"), TransM,
+	)
+
+	ppm := binding.NewFloat()
+	mgm := binding.NewFloat()
+
+	PPM := widget.NewEntryWithData(binding.FloatToString(ppm))
+	MGM := widget.NewEntryWithData(binding.FloatToString(mgm))
+
+	ppmArea := container.New(layout.NewFormLayout(), widget.NewLabel("ppm"), PPM)
+	mgmArea := container.New(layout.NewFormLayout(), widget.NewLabel("mg/m^3"), MGM)
+
+	leftBtn := widget.NewButton("<", func() {
+		tPpm, _ := ppm.Get()
+		m, _ := transM.Get()
+		t, _ := transT.Get()
+		p, _ := transP.Get()
+		mgm.Set(tPpm * m * 273.15 * p / (22.4 * (273.15 + t) * 101325))
+	})
+	rightBtn := widget.NewButton(">", func() {
+		tMgm, _ := ppm.Get()
+		m, _ := transM.Get()
+		t, _ := transT.Get()
+		p, _ := transP.Get()
+		ppm.Set((tMgm * 22.4 * (273.15 + t) * 101325) / (m * 273.15 * p))
+	})
+
+	transArea := container.NewGridWithColumns(3,
+		mgmArea,
+		container.NewCenter(container.NewHBox(leftBtn, rightBtn)),
+		ppmArea,
+	)
+
+	transform := container.NewVBox(
+		widget.NewLabel("Base Info"),
+		baseInfo,
+		widget.NewLabel("Transform Area"),
+		transArea,
+	)
+
+	// help := canvas.NewImageFromFile("help.png")
+	// help.FillMode = canvas.ImageFillOriginal
+
+	tabs := container.NewAppTabs(
+		container.NewTabItem("Main", container.NewPadded(main)),
+		container.NewTabItem("Transform", container.NewPadded(transform)),
+		// container.NewTabItem("Help", container.NewPadded(help)),
+		container.NewTabItem("About", container.NewCenter(
+			container.NewVBox(
+				widget.NewLabel("Author: -LAN-"),
+				widget.NewLabel("Github: https://github.com/laipz8200/AGA8"),
+			),
+		)),
+	)
+	w.SetContent(container.NewPadded(tabs))
 	w.ShowAndRun()
 }
