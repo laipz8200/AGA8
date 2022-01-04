@@ -1702,7 +1702,7 @@ func main() {
 		transArea,
 	)
 
-	// help := canvas.NewImageFromFile("help.png")
+	// help := canvas.NewImageFromFile("./asserts/help.png")
 	// help.FillMode = canvas.ImageFillOriginal
 
 	tabs := container.NewAppTabs(
