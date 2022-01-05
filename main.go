@@ -8,6 +8,6 @@ import (
 
 func main() {
 	app := gui.CreateApp()
-	app.Run()
 	log.Println("App Start")
+	app.Run()
 }

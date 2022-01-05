@@ -27,12 +27,12 @@ func CreateApp() fyne.App {
 
 	main := MainPage()
 	transform := TransformPage()
-	help := ChineseHelpPage()
+	// help := ChineseHelpPage()
 
 	tabs := container.NewAppTabs(
 		container.NewTabItem("Home", container.NewPadded(main)),
 		container.NewTabItem("Transform", container.NewPadded(transform)),
-		container.NewTabItem("Help", container.NewPadded(help)),
+		// container.NewTabItem("Help", container.NewPadded(help)),
 		container.NewTabItem("About", container.NewCenter(
 			container.NewVBox(
 				widget.NewLabel("Author: -LAN-"),
@@ -51,9 +51,11 @@ func CreateApp() fyne.App {
 }
 
 func MainPage() *fyne.Container {
+	// Conditons
 	T := binding.NewFloat()
 	P := binding.NewFloat()
 
+	// Compositions
 	CH4 := binding.NewFloat()
 	N2 := binding.NewFloat()
 	CO2 := binding.NewFloat()
@@ -65,7 +67,6 @@ func MainPage() *fyne.Container {
 	CO := binding.NewFloat()
 	O2 := binding.NewFloat()
 	iC4H10 := binding.NewFloat()
-
 	nC4H10 := binding.NewFloat()
 	iC5H12 := binding.NewFloat()
 	nC5H12 := binding.NewFloat()
@@ -77,6 +78,8 @@ func MainPage() *fyne.Container {
 	He := binding.NewFloat()
 	Ar := binding.NewFloat()
 
+	// Results
+	density := binding.NewFloat()
 	Mm := binding.NewFloat()
 	D := binding.NewFloat()
 	Z := binding.NewFloat()
@@ -93,9 +96,9 @@ func MainPage() *fyne.Container {
 	JT := binding.NewFloat()
 	Kappa := binding.NewFloat()
 
+	// Entries
 	tempreture := widget.NewEntryWithData(binding.FloatToString(T))
 	absolutePressure := widget.NewEntryWithData(binding.FloatToString(P))
-
 	methane := widget.NewEntryWithData(binding.FloatToString(CH4))         // 甲烷
 	nitrogen := widget.NewEntryWithData(binding.FloatToString(N2))         // 氮气
 	carbonDioxide := widget.NewEntryWithData(binding.FloatToString(CO2))   // 二氧化碳
@@ -118,6 +121,8 @@ func MainPage() *fyne.Container {
 	helium := widget.NewEntryWithData(binding.FloatToString(He))           // 氦气
 	argon := widget.NewEntryWithData(binding.FloatToString(Ar))            // 氩气
 
+	// Labels
+	Density := widget.NewLabelWithData(binding.FloatToStringWithFormat(density, "%0.16g"))
 	MolarMass := widget.NewLabelWithData(binding.FloatToStringWithFormat(Mm, "%0.16g"))
 	MolarDensity := widget.NewLabelWithData(binding.FloatToStringWithFormat(D, "%0.16g"))
 	Pressure := widget.NewLabelWithData(binding.FloatToStringWithFormat(P, "%0.16g"))
@@ -137,42 +142,22 @@ func MainPage() *fyne.Container {
 
 	cleft := container.New(
 		layout.NewFormLayout(),
-		widget.NewLabel("CH4"), methane,
-		widget.NewLabel("N2"), nitrogen,
-		widget.NewLabel("CO2"), carbonDioxide,
-		widget.NewLabel("C2H6"), ethane,
-		widget.NewLabel("C3H8"), propane,
-		widget.NewLabel("H2O"), water,
-		widget.NewLabel("H2S"), hydrogenSulfide,
-		widget.NewLabel("H2"), hydrogen,
-		widget.NewLabel("CO"), carbonMonoxide,
-		widget.NewLabel("O2"), oxygen,
-		widget.NewLabel("i-C4H10"), isobutane,
+		widget.NewLabel("CH4"), methane, widget.NewLabel("N2"), nitrogen, widget.NewLabel("CO2"), carbonDioxide, widget.NewLabel("C2H6"), ethane,
+		widget.NewLabel("C3H8"), propane, widget.NewLabel("H2O"), water, widget.NewLabel("H2S"), hydrogenSulfide, widget.NewLabel("H2"), hydrogen,
+		widget.NewLabel("CO"), carbonMonoxide, widget.NewLabel("O2"), oxygen, widget.NewLabel("i-C4H10"), isobutane,
 	)
-
 	cright := container.New(
 		layout.NewFormLayout(),
-		widget.NewLabel("n-C4H10"), nButane,
-		widget.NewLabel("i-C5H12"), isopentane,
-		widget.NewLabel("n-C5H12"), nPentane,
-		widget.NewLabel("n-C6H14"), nHexane,
-		widget.NewLabel("n-C7H16"), nHeptane,
-		widget.NewLabel("n-C8H18"), nOctane,
-		widget.NewLabel("n-C9H20"), nNonane,
-		widget.NewLabel("n-C10H22"), nDecane,
-		widget.NewLabel("He"), helium,
-		widget.NewLabel("Ar"), argon,
+		widget.NewLabel("n-C4H10"), nButane, widget.NewLabel("i-C5H12"), isopentane, widget.NewLabel("n-C5H12"), nPentane, widget.NewLabel("n-C6H14"), nHexane,
+		widget.NewLabel("n-C7H16"), nHeptane, widget.NewLabel("n-C8H18"), nOctane, widget.NewLabel("n-C9H20"), nNonane, widget.NewLabel("n-C10H22"), nDecane,
+		widget.NewLabel("He"), helium, widget.NewLabel("Ar"), argon,
 	)
 
-	composition := container.NewGridWithColumns(
-		2,
-		cleft, cright,
-	)
+	composition := container.NewGridWithColumns(2, cleft, cright)
 
 	condition := container.New(
 		layout.NewFormLayout(),
-		widget.NewLabel("tempreture [K]"), tempreture,
-		widget.NewLabel("absolute pressure [kPa]"), absolutePressure,
+		widget.NewLabel("tempreture [K]"), tempreture, widget.NewLabel("absolute pressure [kPa]"), absolutePressure,
 	)
 
 	reset := widget.NewButton("Reset", func() {
@@ -200,6 +185,7 @@ func MainPage() *fyne.Container {
 		He.Set(0)
 		Ar.Set(0)
 
+		density.Set(0)
 		Mm.Set(0)
 		D.Set(0)
 		Z.Set(0)
@@ -243,6 +229,7 @@ func MainPage() *fyne.Container {
 		ar, _ := Ar.Get()
 
 		mm, d, z, dpdd, dpdd2, dpdt, u, h, s, cv, cp, w, g, jt, kappa := aga8.Calc(t, p, []float64{ch4, n2, co2, c2h6, c3h8, ic4h10, nc4h10, ic5h12, nc5h12, nc6h14, nc7h16, nc8h18, nc9h20, nc10h22, h2, o2, co, h2o, h2s, he, ar})
+		density.Set(mm * d)
 		Mm.Set(mm)
 		D.Set(d)
 		Z.Set(z)
@@ -263,21 +250,12 @@ func MainPage() *fyne.Container {
 	left := container.NewVBox(widget.NewLabel("Composition"), composition, widget.NewLabel("Condition"), condition, layout.NewSpacer(), buttonGroup)
 	output := container.New(
 		layout.NewFormLayout(),
-		widget.NewLabel("Molar mass [g/mol]:"), MolarMass,
-		widget.NewLabel("Molar density [mol/l]:"), MolarDensity,
-		widget.NewLabel("Pressure [kPa]:"), Pressure,
-		widget.NewLabel("Compressibility factor:"), CompressibilityFactor,
-		widget.NewLabel("d(P)/d(rho) [kPa/(mol/l)]:"), dPdrho,
-		widget.NewLabel("d^2(P)/d(rho)^2 [kPa/(mol/l)^2]:"), d2Pdrho2,
-		widget.NewLabel("d(P)/d(T) [kPa/K]:"), dPdT,
-		widget.NewLabel("Energy [J/mol]:"), Energy,
-		widget.NewLabel("Enthalpy [J/mol]:"), Enthalpy,
-		widget.NewLabel("Entropy [J/mol-K]:"), Entropy,
-		widget.NewLabel("Isochoric heat capacity [J/mol-K]:"), IsochoricHeatCapacity,
-		widget.NewLabel("Isobaric heat capacity [J/mol-K]:"), IsobaricHeatCapacity,
-		widget.NewLabel("Speed of sound [m/s]:"), SpeedOfSound,
-		widget.NewLabel("Gibbs energy [J/mol]:"), GibbsEnergy,
-		widget.NewLabel("Joule-Thomson coefficient [K/kPa]:"), JouleThomsonCoefficient,
+		widget.NewLabel("Density [g/l]:"), Density, widget.NewLabel("Molar mass [g/mol]:"), MolarMass, widget.NewLabel("Molar density [mol/l]:"), MolarDensity,
+		widget.NewLabel("Pressure [kPa]:"), Pressure, widget.NewLabel("Compressibility factor:"), CompressibilityFactor, widget.NewLabel("d(P)/d(rho) [kPa/(mol/l)]:"), dPdrho,
+		widget.NewLabel("d^2(P)/d(rho)^2 [kPa/(mol/l)^2]:"), d2Pdrho2, widget.NewLabel("d(P)/d(T) [kPa/K]:"), dPdT, widget.NewLabel("Energy [J/mol]:"), Energy,
+		widget.NewLabel("Enthalpy [J/mol]:"), Enthalpy, widget.NewLabel("Entropy [J/mol-K]:"), Entropy, widget.NewLabel("Isochoric heat capacity [J/mol-K]:"), IsochoricHeatCapacity,
+		widget.NewLabel("Isobaric heat capacity [J/mol-K]:"), IsobaricHeatCapacity, widget.NewLabel("Speed of sound [m/s]:"), SpeedOfSound,
+		widget.NewLabel("Gibbs energy [J/mol]:"), GibbsEnergy, widget.NewLabel("Joule-Thomson coefficient [K/kPa]:"), JouleThomsonCoefficient,
 		widget.NewLabel("Isentropic exponent:"), IsentropicExponent,
 	)
 
@@ -333,12 +311,7 @@ func TransformPage() *fyne.Container {
 		ppmArea,
 	)
 
-	return container.NewVBox(
-		widget.NewLabel("Base Info"),
-		baseInfo,
-		widget.NewLabel("Transform Area"),
-		transArea,
-	)
+	return container.NewVBox(widget.NewLabel("Base Info"), baseInfo, widget.NewLabel("Transform Area"), transArea)
 }
 
 func ChineseHelpPage() *fyne.Container {
