@@ -1,5 +1,6 @@
-release/
 .DS_Store
+release/
+.vscode/
 
 # Created by https://www.toptal.com/developers/gitignore/api/go
 # Edit at https://www.toptal.com/developers/gitignore?templates=go

@@ -250,8 +250,8 @@ func MainPage() *fyne.Container {
 	left := container.NewVBox(widget.NewLabel("Composition"), composition, widget.NewLabel("Condition"), condition, layout.NewSpacer(), buttonGroup)
 	output := container.New(
 		layout.NewFormLayout(),
-		widget.NewLabel("Density [g/l]:"), Density, widget.NewLabel("Molar mass [g/mol]:"), MolarMass, widget.NewLabel("Molar density [mol/l]:"), MolarDensity,
-		widget.NewLabel("Pressure [kPa]:"), Pressure, widget.NewLabel("Compressibility factor:"), CompressibilityFactor, widget.NewLabel("d(P)/d(rho) [kPa/(mol/l)]:"), dPdrho,
+		widget.NewLabel("Density [kg/m^3]:"), Density, widget.NewLabel("Molar mass [g/mol]:"), MolarMass, widget.NewLabel("Molar density [mol/l]:"), MolarDensity,
+		widget.NewLabel("Pressure [kPa]:"), Pressure, widget.NewLabel("Compressibility factor (Z):"), CompressibilityFactor, widget.NewLabel("d(P)/d(rho) [kPa/(mol/l)]:"), dPdrho,
 		widget.NewLabel("d^2(P)/d(rho)^2 [kPa/(mol/l)^2]:"), d2Pdrho2, widget.NewLabel("d(P)/d(T) [kPa/K]:"), dPdT, widget.NewLabel("Energy [J/mol]:"), Energy,
 		widget.NewLabel("Enthalpy [J/mol]:"), Enthalpy, widget.NewLabel("Entropy [J/mol-K]:"), Entropy, widget.NewLabel("Isochoric heat capacity [J/mol-K]:"), IsochoricHeatCapacity,
 		widget.NewLabel("Isobaric heat capacity [J/mol-K]:"), IsobaricHeatCapacity, widget.NewLabel("Speed of sound [m/s]:"), SpeedOfSound,
